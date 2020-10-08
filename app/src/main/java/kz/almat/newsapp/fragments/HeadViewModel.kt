@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kz.almat.newsapp.models.Article
 import kz.almat.newsapp.models.NewsResponse
 import kz.almat.newsapp.repository.HeadRepository
 import kz.almat.newsapp.util.Resource
@@ -15,10 +16,12 @@ class HeadViewModel(
 ): ViewModel() {
 
     val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-    val breakingNewsPage = 1
+    var breakingNewsPage = 1
+    var breakingNewsResponse: NewsResponse? = null
 
     val allNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-    val allNewsPage = 1
+    var allNewsPage = 1
+    var allNewsResponse: NewsResponse? = null
 
     init {
         getBreakingNews("us", "science")
@@ -41,7 +44,15 @@ class HeadViewModel(
     private fun handleBreakingNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse> {
         if(response.isSuccessful) {
             response.body()?.let {resultResponse ->
-                return Resource.Success(resultResponse)
+                breakingNewsPage++
+                if(breakingNewsResponse == null) {
+                    breakingNewsResponse = resultResponse
+                } else {
+                    val oldArticles = breakingNewsResponse?.articles
+                    val newArticles = resultResponse.articles
+                    oldArticles?.addAll(newArticles)
+                }
+                return Resource.Success(breakingNewsResponse ?: resultResponse)
             }
         }
         return Resource.Error(response.message())
@@ -50,10 +61,27 @@ class HeadViewModel(
     private fun handleAllNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse> {
         if(response.isSuccessful) {
             response.body()?.let {resultResponse ->
-                return Resource.Success(resultResponse)
+                allNewsPage++
+                if(allNewsResponse == null) {
+                    allNewsResponse = resultResponse
+                } else {
+                    val oldArticles = allNewsResponse?.articles
+                    val newArticles = resultResponse.articles
+                    oldArticles?.addAll(newArticles)
+                }
+                return Resource.Success(allNewsResponse ?: resultResponse)
             }
         }
         return Resource.Error(response.message())
     }
 
+    fun saveArticle(article: Article) = viewModelScope.launch {
+        headRepository.upsert(article)
+    }
+
+    fun getSavedNews() = headRepository.getSavedNews()
+
+    fun deleteArticle(article: Article) = viewModelScope.launch {
+        headRepository.deleteArticle(article)
+    }
 }
