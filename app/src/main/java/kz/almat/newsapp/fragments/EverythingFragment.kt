@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_everything.*
 import kotlinx.coroutines.Job
@@ -31,6 +32,16 @@ class EverythingFragment : Fragment(R.layout.fragment_everything) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as MainActivity).viewModel
         setupRecyclerView()
+
+        newsAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("article", it)
+            }
+            findNavController().navigate(
+                R.id.action_everythingFragment_to_articleFragment,
+                bundle
+            )
+        }
 
         var job: Job? = null
         etSearch.addTextChangedListener {editable ->

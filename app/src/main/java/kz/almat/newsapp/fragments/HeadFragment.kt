@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_head.*
 import kz.almat.newsapp.MainActivity
@@ -25,6 +26,17 @@ class HeadFragment : Fragment(R.layout.fragment_head) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as MainActivity).viewModel
         setupRecyclerView()
+
+        newsAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("article", it)
+            }
+            findNavController().navigate(
+                R.id.action_headFragment_to_articleFragment,
+                bundle
+            )
+        }
+
         viewModel.breakingNews.observe(viewLifecycleOwner, Observer {response ->
              when(response ) {
                  is Resource.Success -> {
