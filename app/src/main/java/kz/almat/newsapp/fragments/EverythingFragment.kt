@@ -130,7 +130,7 @@ class EverythingFragment : Fragment(R.layout.fragment_everything) {
             if(shouldPaginate) {
                 viewModel.getAllNews(etSearch.text.toString())
                 isScrolling = false
-            } 
+            }
         }
 
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
