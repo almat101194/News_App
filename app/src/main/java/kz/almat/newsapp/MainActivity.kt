@@ -7,10 +7,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import kz.almat.newsapp.db.ArticleDatabase
-import kz.almat.newsapp.fragments.EverythingFragment
-import kz.almat.newsapp.fragments.HeadFragment
 import kz.almat.newsapp.fragments.HeadViewModel
-import kz.almat.newsapp.fragments.adapter.ViewPagerAdapter
 import kz.almat.newsapp.repository.HeadRepository
 import kz.almat.newsapp.repository.HeadViewModelProviderFactory
 
@@ -29,16 +26,7 @@ class MainActivity : AppCompatActivity() {
         val viewModelProviderFactory = HeadViewModelProviderFactory(headRepository)
         viewModel = ViewModelProvider(this, viewModelProviderFactory).get(HeadViewModel::class.java)
 
-//        setUpTabs()
     }
 
-//    private fun setUpTabs() {
-//        val adapter = ViewPagerAdapter(
-//            supportFragmentManager
-//        )
-//        adapter.addFragment(HeadFragment(), "Head")
-//        adapter.addFragment(EverythingFragment(), "Everything")
-//        viewPager.adapter = adapter
-//        tabs.setupWithViewPager(viewPager)
-//    }
+
 }
