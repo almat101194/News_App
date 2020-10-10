@@ -14,7 +14,10 @@ interface NewsApi {
         countryCode: String = "us",
 
         @Query("page")
-        pageNumber: Int = 1,
+        pageNumber: Int = 15,
+
+        @Query("pageSize")
+        pageSize: Int = 15,
 
         @Query("category")
         categoryTheme: String = "science",

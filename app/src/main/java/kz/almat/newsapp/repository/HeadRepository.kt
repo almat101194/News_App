@@ -7,8 +7,8 @@ import kz.almat.newsapp.models.Article
 class HeadRepository(
     val db: ArticleDatabase
 ) {
-    suspend fun getBreakingNews(countryCode: String, pageNumber: Int, categoryTheme: String) =
-        RetrofitInstance.api.getBreakingNews(countryCode, pageNumber, categoryTheme)
+    suspend fun getBreakingNews(countryCode: String, pageNumber: Int, pageSize: Int ,categoryTheme: String) =
+        RetrofitInstance.api.getBreakingNews(countryCode, pageNumber, pageSize , categoryTheme)
 
     suspend fun getAllNews(allQuery: String, pageNumber: Int) =
         RetrofitInstance.api.getAllNews(allQuery, pageNumber)

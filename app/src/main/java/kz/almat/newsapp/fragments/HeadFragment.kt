@@ -107,7 +107,8 @@ class HeadFragment : Fragment(R.layout.fragment_head) {
             val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
                     isTotalMoreThanVisible && isScrolling
             if(shouldPaginate) {
-                viewModel.getBreakingNews("us", "science")
+                viewModel.content()
+//                getBreakingNews("us", "science")
                 isScrolling = false
             }
         }

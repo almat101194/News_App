@@ -1,10 +1,15 @@
 package kz.almat.newsapp.fragments
 
+import android.os.Handler
+import androidx.core.os.postDelayed
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kz.almat.newsapp.fragments.adapter.NewsAdapter
 import kz.almat.newsapp.models.Article
 import kz.almat.newsapp.models.NewsResponse
 import kz.almat.newsapp.repository.HeadRepository
@@ -17,6 +22,7 @@ class HeadViewModel(
 
     val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var breakingNewsPage = 1
+    val breakingNewsPageSize = 15
     var breakingNewsResponse: NewsResponse? = null
 
     val allNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
@@ -24,12 +30,30 @@ class HeadViewModel(
     var allNewsResponse: NewsResponse? = null
 
     init {
+            content()
+//        getBreakingNews("us", "science")
+    }
+
+    fun content() {
         getBreakingNews("us", "science")
+
+        refresh(5000)
+    }
+
+    fun refresh(millisec: Int){
+        val handler = Handler()
+
+        val runnable = Runnable{
+            run {
+                content()
+            }
+        }
+        handler.postDelayed(runnable, millisec.toLong())
     }
 
     fun getBreakingNews(countryCode: String, categoryTheme: String) = viewModelScope.launch {
         breakingNews.postValue(Resource.Loading())
-        val response = headRepository.getBreakingNews(countryCode,  breakingNewsPage, categoryTheme)
+        val response = headRepository.getBreakingNews(countryCode,  breakingNewsPage, breakingNewsPageSize ,categoryTheme)
         breakingNews.postValue(handleBreakingNewsResponse(response))
 //        delay(5000L)
     }
