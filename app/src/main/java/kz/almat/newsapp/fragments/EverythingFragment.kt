@@ -33,10 +33,12 @@ class EverythingFragment : Fragment(R.layout.fragment_everything) {
     lateinit var newsAdapter: NewsAdapter
     val TAG = "EverythingFragment"
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as MainActivity).viewModel
         setupRecyclerView()
+        refresh()
 
         newsAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {
@@ -59,7 +61,15 @@ class EverythingFragment : Fragment(R.layout.fragment_everything) {
                     }
                 }
             }
+
         }
+
+        swipe_ref.setOnRefreshListener {
+            viewModel.getAllNews(etSearch.toString())
+            swipe_ref.isRefreshing = false
+        }
+
+
 
         viewModel.allNews.observe(viewLifecycleOwner, Observer {response ->
             when(response ) {
@@ -87,6 +97,12 @@ class EverythingFragment : Fragment(R.layout.fragment_everything) {
             }
 
         })
+    }
+
+    private fun refresh() {
+
+
+
     }
 
     private fun setupRecyclerView() {
