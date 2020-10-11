@@ -38,7 +38,6 @@ class EverythingFragment : Fragment(R.layout.fragment_everything) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as MainActivity).viewModel
         setupRecyclerView()
-        refresh()
 
         newsAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {
@@ -97,12 +96,6 @@ class EverythingFragment : Fragment(R.layout.fragment_everything) {
             }
 
         })
-    }
-
-    private fun refresh() {
-
-
-
     }
 
     private fun setupRecyclerView() {

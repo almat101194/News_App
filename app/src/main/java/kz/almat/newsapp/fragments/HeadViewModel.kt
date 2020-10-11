@@ -31,7 +31,6 @@ class HeadViewModel(
 
     init {
             content()
-//        getBreakingNews("us", "science")
     }
 
     fun content() {
@@ -55,14 +54,12 @@ class HeadViewModel(
         breakingNews.postValue(Resource.Loading())
         val response = headRepository.getBreakingNews(countryCode,  breakingNewsPage, breakingNewsPageSize ,categoryTheme)
         breakingNews.postValue(handleBreakingNewsResponse(response))
-//        delay(5000L)
     }
 
     fun getAllNews(allQuery: String) = viewModelScope.launch {
         allNews.postValue(Resource.Loading())
         val response = headRepository.getAllNews(allQuery , allNewsPage)
         allNews.postValue(handleAllNewsResponse(response))
-//        delay(5000L)
     }
 
     private fun handleBreakingNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse> {
